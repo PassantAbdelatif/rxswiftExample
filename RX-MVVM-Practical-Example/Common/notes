@@ -1,0 +1,3 @@
+
+To start off we need to define two important types for view controllers and view models,
+to keep our app architecture consistent from the beginning and to enforce code style for future features.

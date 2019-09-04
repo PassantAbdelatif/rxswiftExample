@@ -43,19 +43,37 @@ extension LoginViewController: ControllerType {
     
     func bindViews(with viewModel: LoginControllerViewModel) {
         //////inputs
-        emailTextField.rx.controlEvent([.editingChanged])
-            .asObservable()
-            .subscribe(onNext: { text in
-                print("editing state changed\(text)")
-            })
-            .disposed(by: disposeBag)
+//        passwordTextField.rx.text.orEmpty          // pushes text
+//            .map { String($0.prefix(5)) }  // pushes first X characters in text
+//            .bind(to: passwordTextField.rx.text)   // pushes text into text field
+//            .disposed(by: disposeBag)
         
+        
+//        emailTextField
+//            .rx
+//            .controlEvent([.editingDidBegin, .editingChanged])
+//            .withLatestFrom(emailTextField.rx.text.asObservable().ignoreNil())
+//            .subscribe(onNext: { (text) in
+//                //I want here to print the text after the editing changed.
+//                print(text)
+//            })
+//            .disposed(by: disposeBag)
+//
         emailTextField.rx.text.asObservable()
             .ignoreNil()
+            .map { text in
+                self.emailTextField.text = String(text.prefix(5))
+                return text
+            }
             .subscribe(viewModel.input.email)
             .disposed(by: disposeBag)
+        
         passwordTextField.rx.text.asObservable()
             .ignoreNil()
+            .map { text in
+                self.passwordTextField.text = String(text.prefix(5))
+                return text
+            }
             .subscribe(viewModel.input.password)
             .disposed(by: disposeBag)
         signInButton.rx.tap.asObservable()
